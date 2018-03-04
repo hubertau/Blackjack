@@ -152,7 +152,7 @@ class Player:
         self.cards += (deck.draw(),)
         if deck.count() < (deck.num*52)/2:
             deck.reset()
-            print ('Deck Reshuffled')
+            print('Deck Reshuffled')
 
 class Pot:
 
@@ -183,7 +183,7 @@ class Pot:
         for i in args:
             while True:
                 bet = int(input('How much do you wish to bet? '))
-                if bet > i.balance:
+                if bet > i.balance or bet == 0:
                     print('You have insufficient funds. Please try again.')
                     continue
                 self.amount = self.amount+bet
@@ -240,7 +240,7 @@ def check_bust(cards):
     # There may be multiple Aces in a hand. So utilise while loop.
     # If hand is bust, decrease sum by 10 until it is not.
     while 11 in cards:
-        
+
         # If sum is over 21, then replace 11 with lowest index by 1.
         # But break if sum is not over 21 and there is still an 11,
         # otherwise the while loop will run forever.
@@ -261,7 +261,7 @@ def give_sum(cards):
 
     # convert cards from letters to numbers
     cards = convert_cards(cards)
-    
+
     # If sum is over 21, then replace 11 with lowest index by 1.
     # But break if sum is not over 21 and there is still an 11,
     # otherwise the while loop will run forever.
@@ -328,6 +328,10 @@ def disp_game_state(pot, comp, *args, comp_disp=0):
         print('')
 
 def play_round(comp, *args):
+
+    '''
+    Play one round.
+    '''
 
     # call global for pot and deck. These will need to be
     # modified for any future rounds
@@ -439,10 +443,11 @@ def play_round(comp, *args):
     if  pcards > ccards:
         if check_blackjack(args[0].cards):
             pot.pay(args[0], winner='player', typ='blackjack')
-            print(player.name + ' wins. Blackjack!\nNew Account Balance: {}'.format(args[0].balance))
+            print(args[0].name + ' wins. Blackjack!\nNew Account Balance: {}'\
+                .format(args[0].balance))
         else:
             pot.pay(args[0], winner='player', typ='regular')
-            print(player.name + ' wins.\nNew Account Balance: {}'.format(args[0].balance))
+            print(args[0].name + ' wins.\nNew Account Balance: {}'.format(args[0].balance))
         return True
 
     # if player's sum is equal, then return bet
@@ -452,7 +457,7 @@ def play_round(comp, *args):
             print('Tie. Bet returned.\nAccount Balance: {}'.format(args[0].balance))
         elif check_blackjack(args[0].cards) and not check_blackjack(comp.cards):
             pot.pay(args[0], winner='player', typ='blackjack')
-            print(Player.name + " wins with Blackjack over dealer's 21.\nAccount Balance: {}"\
+            print(args[0].name + " wins with Blackjack over dealer's 21.\nAccount Balance: {}"\
                 .format(args[0].balance))
         elif not(check_blackjack(args[0].cards)) and check_blackjack(comp.cards):
             pot.pay(comp, winner='dealer')
@@ -493,7 +498,7 @@ p1 = Player(name, 100)
 while True:
     if play_round(comp, p1):
         while True:
-            x = input('Another round? [y/n]').lower()
+            x = input('Another round? [y/n] ').lower()
             if x == 'y' or x == 'n':
                 break
         if x == 'n':
