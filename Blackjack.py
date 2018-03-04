@@ -183,8 +183,11 @@ class Pot:
         for i in args:
             while True:
                 bet = int(input('How much do you wish to bet? '))
-                if bet > i.balance or bet == 0:
+                if bet > i.balance:
                     print('You have insufficient funds. Please try again.')
+                    continue
+                elif bet == 0:
+                    print('Cannot enter 0 bet.')
                     continue
                 self.amount = self.amount+bet
                 break
