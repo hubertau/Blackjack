@@ -349,11 +349,9 @@ def play_round(comp, *args):
         player_init = (deck.draw(), deck.draw())
         player.set_cards(player_init)
 
-    for player in args:
-        disp_game_state(pot, comp, player)
-
     # now ask for bets
     for player in args:
+        print(player)
         bet = pot.ask_bet(player)
         player.withdraw(bet)
 
